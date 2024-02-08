@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactPro", "ContactPro.csproj", "{AA37B8B4-1CDF-4249-9325-62B6EE629C87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA37B8B4-1CDF-4249-9325-62B6EE629C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA37B8B4-1CDF-4249-9325-62B6EE629C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA37B8B4-1CDF-4249-9325-62B6EE629C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA37B8B4-1CDF-4249-9325-62B6EE629C87}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BED6051-360E-414C-BAB1-E16B88F34902}
+	EndGlobalSection
+EndGlobal
