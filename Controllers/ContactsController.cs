@@ -189,8 +189,8 @@ namespace ContactPro
             }
             
             ViewData["StatesList"] = new SelectList(Enum.GetValues(typeof(Fylker)).Cast<Fylker>().ToList());
-            ViewData["CategoryList"] = new MultiSelectList(await _addressBookService.GetUserCategoriesAsync(appUserId), "Id", "Name");
-            
+            ViewData["CategoryList"] = new MultiSelectList(await _addressBookService.GetUserCategoriesAsync(appUserId), "Id", "Name", await _addressBookService.GetContactCategoryIdsAsync(contact.Id));
+
             return View(contact);
         }
 

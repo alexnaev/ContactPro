@@ -65,9 +65,22 @@ namespace ContactPro.Services
             return categories;
         }
         
-        public Task<ICollection<int>> GetContactCategoryIdsAsync(int contactId)
+        public async Task<ICollection<int>> GetContactCategoryIdsAsync(int contactId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var contact = await _context.Contacts.Include(c => c.Categories)
+                                                     .FirstOrDefaultAsync(c => c.Id == contactId);
+                
+                List<int> categoryIds = contact.Categories.Select(c => c.Id).ToList();
+
+                return categoryIds;
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
         }
         
         public Task<ICollection<Category>> GetContactCategoriesAsync(int contactId)
