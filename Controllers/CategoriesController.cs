@@ -120,8 +120,13 @@ namespace ContactPro
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    string appUserId = _userManager.GetUserId(User);
+
+                    if (category.AppUserId == appUserId)
+                    {
+                        _context.Update(category);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -136,7 +141,7 @@ namespace ContactPro
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", category.AppUserId);
+            
             return View(category);
         }
 
