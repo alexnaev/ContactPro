@@ -30,7 +30,7 @@ namespace ContactPro
         {
             string appUserId = _userManager.GetUserId(User);
 
-            var categories = _context.Categories.Where(c => c.AppUserId == appUserId)
+            var categories = await _context.Categories.Where(c => c.AppUserId == appUserId)
                                                 .Include(c => c.AppUser)
                                                 .ToListAsync();
 
@@ -86,17 +86,21 @@ namespace ContactPro
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Categories == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            string appUserId = _userManager.GetUserId(User);
+
+            var category = await _context.Categories.Where(c => c.Id == id && c.AppUserId == appUserId)
+                                                    .FirstOrDefaultAsync();
+
             if (category == null)
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", category.AppUserId);
+            
             return View(category);
         }
 
