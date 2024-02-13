@@ -13,6 +13,7 @@ using ContactPro.Models.ViewModels;
 using ContactPro.Enums;
 using ContactPro.Services;
 using ContactPro.Services.Interfaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ContactPro
 {
@@ -22,23 +23,27 @@ namespace ContactPro
         private readonly UserManager<AppUser> _userManager;
         private readonly IImageService _imageService;
         private readonly IAddressBookService _addressBookService;
+        private readonly IEmailSender _emailService;
 
         public ContactsController(ApplicationDbContext context, 
                                   UserManager<AppUser> userManager, 
                                   IImageService imageService, 
-                                  IAddressBookService addressBookService)
+                                  IAddressBookService addressBookService,
+                                  IEmailSender emailService)
         {
             _context = context;
             _userManager = userManager;
             _imageService = imageService;
             _addressBookService = addressBookService;
+            _emailService = emailService;
         }
 
         // GET: Contacts
         [Authorize]
-        public IActionResult Index(int categoryId = 0)
+        public IActionResult Index(int categoryId = 0, string? swalMessage = null)
         {
-            List<Contact> contacts = new List<Contact>();
+            ViewData["SwalMessage"] = swalMessage;
+            List<Contact> contacts = new();
             string appUserId = _userManager.GetUserId(User);
 
             AppUser appUser = _context.Users
@@ -72,7 +77,7 @@ namespace ContactPro
         public IActionResult SearchContacts(string searchString)
         {
             string appUserId = _userManager.GetUserId(User);
-            List<Contact> contacts = new List<Contact>();
+            List<Contact> contacts = new();
 
             AppUser appUser = _context.Users
                                       .Include(c => c.Contacts)
@@ -98,6 +103,7 @@ namespace ContactPro
             return View(nameof(Index), contacts);
         }
 
+        // GET: Email Form
         [Authorize]
         public async Task<IActionResult> EmailContact(int? id)
         {
@@ -110,20 +116,42 @@ namespace ContactPro
                 return NotFound();
             }
 
-            EmailData emailData = new EmailData()
+            EmailData emailData = new()
             {
                 EmailAddress = contact.Email,
                 FirstName = contact.FirstName,
                 LastName = contact.LastName
             };
 
-            EmailContactViewModel model = new EmailContactViewModel()
+            EmailContactViewModel model = new()
             {
                 Contact = contact,
                 EmailData = emailData
             };
             
             return View(model);
+        }
+
+        // POST: Email Form
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EmailContact(EmailContactViewModel ecvm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _emailService.SendEmailAsync(ecvm.EmailData.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
+                    return RedirectToAction("Index", "Contacts", new {swalMessage = "Success: Email Sent!"});
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index", "Contacts", new {swalMessage = "Error: Email Send Failed!"});
+                    throw;
+                }
+            }
+
+            return View(ecvm);
         }
 
         // GET: Contacts/Details/5
