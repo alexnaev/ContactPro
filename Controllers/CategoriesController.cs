@@ -122,8 +122,9 @@ namespace ContactPro
                 {
                     string appUserId = _userManager.GetUserId(User);
 
-                    if (category.AppUserId == appUserId)
+                    if (await _context.Categories.AnyAsync(c => c.Id == id && c.AppUserId == appUserId))
                     {
+                        category.AppUserId = appUserId;
                         _context.Update(category);
                         await _context.SaveChangesAsync();
                     }
