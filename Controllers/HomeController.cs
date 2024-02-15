@@ -32,7 +32,7 @@ namespace ContactPro.Controllers
 
             if (code == 404)
             {
-                customError.Message = "The page you are looking for might have been removed had its name changed og is temporarily unavailable.";
+                customError.Message = "The page you are looking for might have been removed had its name changed or is temporarily unavailable.";
             }
             else
             {
