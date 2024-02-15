@@ -61,7 +61,6 @@ namespace ContactPro
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -72,13 +71,17 @@ namespace ContactPro
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AppUserId,Name")] Category category)
         {
+            ModelState.Remove("AppUserId");
+
             if (ModelState.IsValid)
             {
+                string appUserId = _userManager.GetUserId(User);
+                category.AppUserId = appUserId;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", category.AppUserId);
+            
             return View(category);
         }
 
