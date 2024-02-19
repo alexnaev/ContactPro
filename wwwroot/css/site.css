@@ -72,6 +72,18 @@ nav {
   background-color: var(--cf-primaryColorLight)
 }
 
+.nav .nav-item .active {
+  color: white !important;
+  background-color: var(--cf-primaryColor) !important;
+  border-color: var(--cf-primary-color);
+}
+
+.profile {
+  border-color: var(--cf-primaryColor);
+  border-style: solid;
+  border-width: 1px;
+}
+
 h1,
 h2,
 h3,
